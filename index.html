@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Planet Cards</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    
+  </style>
+</head>
+<body>
+
+  <div id="earth-radius-container">
+    <div class="earth-radius"></div>
+    <span class="earth-label">Earth Radius</span>
+  </div>
+
+  <!-- ///First try dynamik visualization -->
+  <div class="exoplanet" style="--planetSizeFactor: 0.5; --planetTemperature: 200;"></div>
+
+
+  <div id="cards-container">
+  </div>
+  <script>
+    fetch('https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+top+1000+*+from+pscomppars&format=json')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(planetData => {
+          createPlanetCard(planetData);
+        });
+      })
+      .catch(error => console.error('Error fetching data:', error));
+
+    function createPlanetCard(planetData) {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      // Create the sphere container
+      const sphereContainer = document.createElement('div');
+      sphereContainer.className = 'sphere-container';
+
+      // Create the sphere
+      const sphere = document.createElement('div');
+      sphere.className = 'sphere';
+
+      // Set the size of the sphere based on pl_rade
+      const earthRadiusSize = 10; // Size in pixels for Earth radius circle
+      const pl_rade = planetData.pl_rade || 1; // Default to 1 Earth radius if null
+      const radius = earthRadiusSize * pl_rade; // Scale relative to Earth radius
+
+      // Limit the sphere size to fit within the container
+      const maxRadius = 120; // Max radius in pixels
+      const sphereSize = radius;
+
+      sphere.style.width = sphereSize + 'px';
+      sphere.style.height = sphereSize + 'px';
+
+      // Append the sphere to the sphere container
+      sphereContainer.appendChild(sphere);
+
+      // Append the sphere container to the card
+      card.appendChild(sphereContainer);
+
+      // Create the facts list
+      const factsList = document.createElement('ul');
+      factsList.className = 'facts-list';
+
+      // Create list items for the facts
+      const facts = [
+        `Planet Name: ${planetData.pl_name || 'N/A'}`,
+        `Planet Radius (Earth radii): ${planetData.pl_rade || 'N/A'}`,
+        `Planet Mass (Earth masses): ${planetData.pl_bmasse || 'N/A'}`,
+        `Orbital Period (days): ${planetData.pl_orbper || 'N/A'}`,
+        `Equilibrium Temperature (K): ${planetData.pl_eqt || 'N/A'}`
+      ];
+
+      facts.forEach(fact => {
+        const li = document.createElement('li');
+        li.textContent = fact;
+        factsList.appendChild(li);
+      });
+
+      // Append the facts list to the card
+      card.appendChild(factsList);
+
+      // Append the card to the cards container
+      document.getElementById('cards-container').appendChild(card);
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

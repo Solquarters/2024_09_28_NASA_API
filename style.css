@@ -1,0 +1,112 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+
+  #earth-radius-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .earth-radius {
+    display: inline-block;
+    background-color: #88c;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin-bottom: 8px;
+  }
+
+  .earth-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  #cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+
+  .sphere-container {
+    height: 150px; /* Fixed height to keep card size consistent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .sphere {
+    background-color: #88c;
+    border-radius: 50%;
+  }
+
+  .facts-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 16px;
+  }
+
+  .facts-list li {
+    text-align: left;
+    margin-bottom: 8px;
+  }
+
+
+
+/* 
+  ///////////////////////////// */
+
+  /* <!-- ///First try dynamik visualization --> */
+  :root {
+    --maxTemperature: 3000;
+  }
+  
+  .exoplanet {
+    width: calc(200px * var(--planetSizeFactor));
+    height: calc(200px * var(--planetSizeFactor));
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    animation: rotate 20s linear infinite;
+    --hue: calc((1 - (var(--planetTemperature) / var(--maxTemperature))) * 240);
+    background: radial-gradient(
+      circle at 30% 30%,
+      hsl(var(--hue), 80%, 50%),
+      #000
+    );
+  }
+  
+  .exoplanet::before {
+    content: "";
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0) 70%
+    );
+    filter: blur(4px);
+  }
+  
+  @keyframes rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
